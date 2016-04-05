@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Ngnix-HelloWorld</title>
+    <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+    <style rel='stylesheet' type='text/css'>
+      body {
+        background-color: black;
+        color: green;
+        font-family: 'Audiowide', cursive;
+      }
+      h1 {
+        font-size: 48px;
+      }
+      li {
+        color: gray;
+      }
+      .container {
+        margin: 0 auto;
+        width: 30%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class='container'>
+      <h1><%= @message %></h1>
+
+      <p>General Info:</p>
+      <ul>
+        <li>Hostname --> <%= node['hostname'] %></li>
+        <li>Platform --> <%= node['platform'] %> <%= node['platform_version'] %></li>
+        <li>Kernel --> <%= node['kernel']['release'] %></li>
+        <li>Uptime --> <%= node['uptime'] %></li>
+      </ul>
+      <p>CPU:</p>
+      <ul>
+        <li><%= node['cpu']['0']['model_name'] %></li>
+        <li>Total CPUs --> <%= node['cpu']['cores'] %></li>
+      </ul>
+      <p>Memory:</p>
+      <ul>
+        <li>Total --> <%= node['memory']['total'].to_i / 1024 %> MB</li>
+        <li>Free --> <%= node['memory']['free'].to_i / 1024 %> MB</li>
+        <li>Cached --> <%= node['memory']['cached'].to_i / 1024 %> MB</li>
+      </ul>
+      <p>Network Interfaces:</p>
+      <ul>
+        <% node['network']['interfaces'].each do |key, value| %>
+          <% if key != 'lo' %>
+            <li><%= key %> --> <%= value.addresses.keys[1] %></li>
+          <% end %>
+        <% end %>
+      </ul>
+      <p>Recipes:</p>
+      <ul>
+        <% node['recipes'].each do |recipe| %>
+          <li> <%= recipe %> </li>
+        <% end %>
+      </ul>
+    </div>
+  </body>
+</html>
